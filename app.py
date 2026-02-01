@@ -10,11 +10,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Get port from environment (Render sets this automatically)
-port = int(os.environ.get('PORT', 5000))
-
+port = int(os.environ.get('PORT', 7860))
 # Firebase initialization
-secret_path = "/etc/secrets/serviceAccountKey.json" if os.path.exists("/etc/secrets/serviceAccountKey.json") else "serviceAccountKey.json"
-
+secret_path = "serviceAccountKey.json"
 if not firebase_admin._apps:
     cred = credentials.Certificate(secret_path)
     firebase_admin.initialize_app(cred)
