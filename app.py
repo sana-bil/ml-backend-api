@@ -9,13 +9,18 @@ from analyzer import analyze_entries
 app = Flask(__name__)
 CORS(app)
 
-# Initialize Firebase (only once)
+# --- CORRECTED FIREBASE INITIALIZATION ---
+# 1. Determine the path to your secret key
+secret_path = "/etc/secrets/serviceAccountKey.json" if os.path.exists("/etc/secrets/serviceAccountKey.json") else "serviceAccountKey.json"
+
+# 2. Initialize the app safely
 if not firebase_admin._apps:
-    secret_path = "/etc/secrets/serviceAccountKey.json" if os.path.exists("/etc/secrets/serviceAccountKey.json") else "serviceAccountKey.json"
+    cred = credentials.Certificate(secret_path)
+    firebase_admin.initialize_app(cred)
 
-cred = credentials.Certificate(secret_path)
-
+# 3. Initialize the client ONLY after the app exists
 db = firestore.client()
+# ------------------------------------------
 
 @app.route('/debug/users', methods=['GET'])
 def list_all_users():
