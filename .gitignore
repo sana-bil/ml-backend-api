@@ -1,0 +1,9 @@
+# Created by venv
+__pycache__/
+*.pyc
+.env
+serviceAccountKey.json
+venv/
+*.pkl
+.DS_Store
+*.log
