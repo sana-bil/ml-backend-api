@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import firebase_admin
@@ -11,13 +12,24 @@ CORS(app)
 
 # Get port from environment (Render sets this automatically)
 port = int(os.environ.get('PORT', 7860))
-# Firebase initialization
-secret_path = "serviceAccountKey.json"
+# Use the absolute path to be 100% sure
+key_path = os.path.join(os.path.dirname(__file__), 'serviceAccountKey.json')
+
 if not firebase_admin._apps:
-    cred = credentials.Certificate(secret_path)
-    firebase_admin.initialize_app(cred)
+    try:
+        # Debug: Check if the file is valid JSON before loading
+        with open(key_path) as f:
+            test_load = json.load(f)
+            print(f"✅ Key File is valid JSON. Project: {test_load.get('project_id')}")
+            
+        cred = credentials.Certificate(key_path)
+        firebase_admin.initialize_app(cred)
+        print("✅ Firebase initialized successfully!")
+    except Exception as e:
+        print(f"❌ Firebase Init Failed: {e}")
 
 db = firestore.client()
+        
 
 # ===== ROOT ENDPOINT (REQUIRED FOR RENDER HEALTH CHECK) =====
 @app.route('/', methods=['GET'])
