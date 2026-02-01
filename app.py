@@ -11,8 +11,9 @@ CORS(app)
 
 # Initialize Firebase (only once)
 if not firebase_admin._apps:
-    cred = credentials.Certificate("serviceAccountKey.json")  # Your JSON file
-    firebase_admin.initialize_app(cred)
+    secret_path = "/etc/secrets/serviceAccountKey.json" if os.path.exists("/etc/secrets/serviceAccountKey.json") else "serviceAccountKey.json"
+
+cred = credentials.Certificate(secret_path)
 
 db = firestore.client()
 
