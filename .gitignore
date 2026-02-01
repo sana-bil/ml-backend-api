@@ -4,6 +4,5 @@ __pycache__/
 .env
 serviceAccountKey.json
 venv/
-*.pkl
 .DS_Store
 *.log
