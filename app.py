@@ -9,6 +9,9 @@ from analyzer import analyze_entries
 app = Flask(__name__)
 CORS(app)
 
+# FIX: Define port here so Render can see it immediately
+port = int(os.environ.get('PORT', 5000))
+
 # --- CORRECTED FIREBASE INITIALIZATION ---
 # 1. Determine the path to your secret key
 secret_path = "/etc/secrets/serviceAccountKey.json" if os.path.exists("/etc/secrets/serviceAccountKey.json") else "serviceAccountKey.json"
@@ -204,5 +207,4 @@ def analyze_all_users():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
